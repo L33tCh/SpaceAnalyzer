@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dropbox Space Analyzer</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/main.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Dropbox Space Analyzer</h1>
+            <p>Visualize your usage and find large files.</p>
+        </div>
+
+        <div class="content" style="text-align: center; margin-top: 50px;">
+            {% if logged_in %}
+                <div class="success-box">
+                    <h3>You are connected!</h3>
+                    
+                    <div style="margin-top: 20px; padding-bottom: 20px; border-bottom: 1px solid #ddd;">
+                        <a href="/process" class="btn-analyze">
+                            {% if checkpoint_exists %} Resume Scan {% else %} Start New Scan {% endif %}
+                        </a>
+                        
+                        {% if checkpoint_exists %}
+                        <p style="margin: 10px 0;">-- OR --</p>
+                        <a href="/load-partial" class="btn-partial">
+                            Stop & View Results So Far
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <p><strong>View Cached Data:</strong></p>
+                        <form action="/process" method="GET" style="display: inline-block;">
+                            <input type="submit" name="analyze" value="Charts" class="btn-menu">
+                            <input type="submit" name="list" value="List All Files" class="btn-menu">
+                            <input type="submit" name="filesearch" value="Search" class="btn-menu">
+                        </form>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <a href="/logout" style="color: #999; text-decoration: none; font-size: 12px;">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="login-box">
+                    <p>To start, please authorize this app to read your file metadata.</p>
+                    <a href="/login" class="btn-login">Login with Dropbox</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <style>
+        .btn-login, .btn-analyze, .btn-partial, .btn-menu {
+            display: inline-block;
+            padding: 15px 30px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-login { background-color: #007ee5; }   /* Dropbox Blue */
+        .btn-analyze { background-color: #00bfa5; } /* Teal */
+        .btn-partial { background-color: #f0ad4e; } /* Orange */
+        .btn-menu { background-color: #555; font-size: 14px; padding: 10px 20px; } /* Grey for tools */
+        
+        .btn-login:hover, .btn-analyze:hover, .btn-partial:hover, .btn-menu:hover { opacity: 0.9; }
+    </style>
+</body>
+</html>

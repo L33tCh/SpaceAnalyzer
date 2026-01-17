@@ -14,6 +14,7 @@
         {
             usageChart();
             typesChart();
+            foldersChart(); // <--- NEW Function Call
         }
 
         function usageChart()
@@ -26,7 +27,7 @@
 
             var options =
             {
-                title: 'Space usage',
+                title: 'Total Account Space',
                 slices: {0 : { color: 'silver' }, 1 : { color: 'gold' }}
             };
 
@@ -38,7 +39,7 @@
         {
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Types');
-            data.addColumn('number', 'Total Size (KB)');
+            data.addColumn('number', 'Size (KB)');
             data.addColumn({type:'string', role:'style'});
 
             {% for size, color, type in rows %}
@@ -47,12 +48,39 @@
 
             var options =
             {
-                title: 'Usage by file types',
+                title: 'Largest File Types',
                 hAxis: { title: 'Size (KB)', minValue: 0 },
-                vAxis: { title: 'File Types' }
+                vAxis: { title: 'File Types' },
+                legend: { position: 'none' }
             };
 
             var chart = new google.visualization.BarChart(document.getElementById('fileTypes'));
+            chart.draw(data, options);
+        }
+        
+        // --- NEW: Folders Chart ---
+        function foldersChart()
+        {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Folder');
+            data.addColumn('number', 'Size (MB)');
+            data.addColumn({type:'string', role:'style'});
+
+            {% for path, size, color in folder_rows %}
+                // Convert KB to MB for cleaner reading on folders
+                data.addRow(['{{ path }}', {{ size / 1024 }}, 'color: {{ color }}']);
+            {% endfor %}
+
+            var options =
+            {
+                title: 'Largest Folders (Cumulative)',
+                hAxis: { title: 'Size (MB)', minValue: 0 },
+                vAxis: { title: 'Folder Path' },
+                legend: { position: 'none' },
+                chartArea: { left: '30%', width: '60%' } // Give more room for long folder paths
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById('folderSizes'));
             chart.draw(data, options);
         }
 
@@ -60,12 +88,18 @@
         </script>
    </head>
    <body>
-      <div id = "spaceUsage" style = "width:700px; height:350px; margin-left: 30%;"></div>
-      <div id = "fileTypes" style = "width:700px; height:300px; margin-left: 30%;"></div>
-      <div class = "formStyle">
-        <form action = "https://spaceanalyzer.scalingo.io/account" method = "GET">
-            <input type = "submit" value = "Back" class = "buttonNormal" title = "Go back" />
-            <input type = "submit" value = "Logout" name = "logout" class = "buttonLogout" title = "Logout" />
+      <h2 style="text-align:center;">Space Analysis</h2>
+      
+      <div id = "spaceUsage" style = "width: 800px; height: 350px; margin: 0 auto;"></div>
+      
+      <div style="display:flex; justify-content: center; flex-wrap: wrap;">
+          <div id = "fileTypes" style = "width: 600px; height: 400px; margin: 10px;"></div>
+          <div id = "folderSizes" style = "width: 600px; height: 400px; margin: 10px;"></div>
+      </div>
+
+      <div class = "formStyle" style="margin-top: 20px;">
+        <form action = "/" method = "GET">
+            <input type = "submit" value = "Back to Dashboard" class = "buttonNormal" />
         </form>
       </div>
    </body>

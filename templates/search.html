@@ -6,7 +6,7 @@
    </head>
    <body>
       <div class="formStyle">
-        <form action = "https://spaceanalyzer.scalingo.io/process" method = "POST">
+        <form action = "http://localhost:5000/process" method = "POST">
             <input type = "text" id = "keyword" name = "keyword" class = "inputField" title = "Enter keyword" />
             <input type = "submit" value = "Search" name = "filesearch" class = "buttonNormal" title = "Run search" />
         </form>
@@ -31,7 +31,7 @@
         <div class="resultsCount">No matches, try again!</div>
       {% endif %}
       <div class="formStyle">
-        <form action = "https://spaceanalyzer.scalingo.io/account" method = "GET">
+        <form action = "/" method = "GET">
             <input type = "submit" value = "Back" class = "buttonNormal" title = "Go back" />
             <input type = "submit" value = "Logout" name = "logout" class = "buttonLogout" title = "Logout" />
         </form>

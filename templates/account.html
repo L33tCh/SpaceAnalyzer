@@ -15,10 +15,10 @@
         </thead>
         <tbody>
             <tr>
-                <td>User ID</td><td>{{ accountInfo["uid"] }}</td>
+                <td>User ID</td><td>{{ session["userID"] }}</td>
             </tr>
             <tr>
-                <td>Name</td><td>{{ accountInfo["display_name"] }}</td>
+                <td>Name</td><td>{{ accountInfo.name.display_name }}</td>
             </tr>
             <tr>
                 <td>Country</td><td>{{ accountInfo["country"] }}</td>
@@ -29,7 +29,7 @@
         </tbody>
       </table>
       <div class = "formStyle">
-        <form action = "https://spaceanalyzer.scalingo.io/process" method = "GET">
+        <form action = "http://localhost:5000/process" method = "GET">
             <input type = "submit" value = "List Files" name = "list" class = "buttonNormal" title = "List files and folders" onclick = "showProcessing()" />
             <input type = "submit" value = "Search" name = "filesearch" class = "buttonNormal" title = "Search for files and folders" onclick = "showProcessing()" />
             <input type = "submit" value = "Space Usage" name = "analyze" class = "buttonNormal" title = "Visualize space usage" onclick = "showProcessing()" />
